@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="action_settings">Settings</string>
+    <string name="app_name">netsound-android</string>
+    <string name="button_submit">Login</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="hello_world">Hello world!</string>
+
+</resources>
