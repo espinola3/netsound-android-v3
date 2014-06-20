@@ -22,8 +22,7 @@ import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.User;
 public class CallAPI extends AsyncTask<String, String, String> {
 	 
 	public static String LOGIN_OPERATION = "0";
-	public static String SIGNUP_OPERATION = "1";
-	public static String STINGS_OPERATION = "2";
+	public static String STINGS_OPERATION = "1";
 	
 	public User user = null;
 	public List<Sting> stingList = null;

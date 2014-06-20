@@ -3,6 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/concierto2"
     tools:context="edu.upc.eetac.dsa.dsaqt1314g4.netsound.MainActivity"
     tools:ignore="MergeRootFrame">
 
@@ -26,6 +27,13 @@
     android:layout_height="wrap_content"
     android:onClick="login"
     android:text="@string/button_submit" />
+
+<Button
+    android:id="@+id/signup"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:onClick="signup"
+    android:text="@string/button_signup" />
 
 </LinearLayout>
 

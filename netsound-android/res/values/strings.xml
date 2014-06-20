@@ -7,6 +7,7 @@
     <string name="app_name">netsound-android</string>
     <string name="button_submit">Login</string>
     <string name="title_activity_home">HomeActivity</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="button_signup">Sign up</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
 
 </resources>

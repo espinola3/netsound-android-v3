@@ -28,6 +28,10 @@
             android:name="edu.upc.eetac.dsa.dsaqt1314g4.netsound.HomeActivity"
             android:label="@string/title_activity_home" >
         </activity>
+        <activity
+            android:name="edu.upc.eetac.dsa.dsaqt1314g4.netsound.SignUpActivity"
+            android:label="@string/title_activity_sign_up" >
+        </activity>
     </application>
 
 </manifest>

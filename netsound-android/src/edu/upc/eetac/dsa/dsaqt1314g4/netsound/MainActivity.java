@@ -126,5 +126,15 @@ public class MainActivity extends Activity implements AsyncResponse{
 		
 	}
 	 
+	public void signup(View view){
+		Intent i = new Intent(getApplicationContext(), SignUpActivity.class);
+		startActivity(i);
+	}
+
+	@Override
+	public void goToLogin() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
