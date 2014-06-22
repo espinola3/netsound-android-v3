@@ -5,18 +5,15 @@ import java.util.List;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
-import com.example.netsound_android.R;
-
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.Sting;
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.User;
+import edu.upc.eetac.dsa.dsaqt1314g4.netsound.utils.Utils;
 
 public class SignUpActivity extends Activity implements AsyncResponse{
 
@@ -70,9 +67,7 @@ public class SignUpActivity extends Activity implements AsyncResponse{
 	
 	public void signup(View view){
 		
-		//{"name":"gtgt","username":"rfef","userpass":"juju","email":"hyhy","description":"kiki"}
-		//http://192.168.1.108:8000/netsound-api/profile
-		
+	
 		 EditText usernameText = (EditText) findViewById(R.id.username);
 		 String username = usernameText.getText().toString(); 
 		 
@@ -88,10 +83,9 @@ public class SignUpActivity extends Activity implements AsyncResponse{
 		 EditText descriptionText = (EditText) findViewById(R.id.description);
 		 String description = descriptionText.getText().toString(); 
 		
-		 String urlString = MainActivity.BASE_URL +"profile/";
-		 //String urlParameters = "?username="+username+"&name="+name+"&email="+email+"&password="+password+"&description="+description;
-			
-		 String urlParameters = "{\"name\":\"gtgt2\",\"username\":\"rfef2\",\"userpass\":\"juju2\",\"email\":\"hyhy2\",\"description\":\"kiki2\"}";
+		 String urlString = MainActivity.BASE_URL +"profile";
+		 String urlParameters = "{\"name\":\""+name+"\",\"username\":\""+username+"\",\"userpass\":\""+password+"\",\"email\":\""+email+"\",\"description\":\""+description+"\"}";
+		
 		 new SignAPI(this).execute(urlString, urlParameters);	
 	}
 
@@ -102,14 +96,14 @@ public class SignUpActivity extends Activity implements AsyncResponse{
 	}
 
 	@Override
-	public void goToLogin() {
-		// TODO Auto-generated method stub
+	public void goToLogin() {		
+		Utils.createDialog(this, "User created", "Well done, your user has been created. You can log in", true); 
 		
 	}
 
 	@Override
 	public void printError(String error) {
-		// TODO Auto-generated method stub
+		 Utils.createDialog(this, "Error", error, false); 
 		
 	}
 

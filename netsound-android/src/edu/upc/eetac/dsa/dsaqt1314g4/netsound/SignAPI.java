@@ -10,13 +10,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.User;
+import edu.upc.eetac.dsa.dsaqt1314g4.netsound.utils.Utils;
+import android.content.Context;
 import android.os.AsyncTask;
+import android.provider.CallLog;
 
 public class SignAPI extends AsyncTask<String, String, String> {
 
-	public AsyncResponse callback=null;	
+	public AsyncResponse callback=null;
+	String username =null;
 	
 	public SignAPI(AsyncResponse callback) {
 		super();
@@ -37,9 +43,11 @@ public class SignAPI extends AsyncTask<String, String, String> {
 			 HttpURLConnection myURLConnection = (HttpURLConnection)myURL.openConnection();		
 			 myURLConnection.setRequestMethod("POST");
 			 myURLConnection.setRequestProperty("Content-Language", "es-ES");
-			 myURLConnection.setRequestProperty("Content-Type", "application/json");
+			 myURLConnection.setRequestProperty("Content-Type", "application/vnd.netsound.api.user+json; charset=UTF-8");
+			 myURLConnection.setRequestProperty("Content-Length", ""+urlParameters.getBytes().length);
+			 myURLConnection.setRequestProperty("Accept", "*/*");
 			 myURLConnection.setUseCaches(false);
-			 myURLConnection.setDoInput(false);
+			 myURLConnection.setDoInput(true);
 			 myURLConnection.setDoOutput(true);
 			 
 			DataOutputStream wr = new DataOutputStream(myURLConnection.getOutputStream());
@@ -50,16 +58,18 @@ public class SignAPI extends AsyncTask<String, String, String> {
 			in = myURLConnection.getInputStream();
 			BufferedReader rd = new BufferedReader(new InputStreamReader(in, Charset.forName("UTF-8")));
 		    String jsonText = readAll(rd);
-		    json = new JSONObject(jsonText);
-		     
+		    json = new JSONObject(jsonText);		     
 		    
-			 	  
+		    
+		    username = (String) json.get("username");				
+				
+			  
 		 } catch (Exception e ) {		  
 			 System.out.println(e.getMessage());		  			 		  
 		 } finally {
 			 try { in.close(); } 
 		     catch (Exception e) {
-		    	
+		    	 System.out.println(e.getMessage());
 		     };	
 		 }
 		 		 			
@@ -75,5 +85,13 @@ public class SignAPI extends AsyncTask<String, String, String> {
 	    return sb.toString();
 	  }
 
+	protected void onPostExecute(String operation) {
+		if(username!=null){
+			callback.goToLogin();
+		}
+		else{
+			callback.printError("Error on registration process, please try again");
+		}
+	}
 
 }

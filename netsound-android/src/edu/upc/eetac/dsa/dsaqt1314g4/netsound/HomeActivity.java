@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,18 +14,18 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
-import com.example.netsound_android.R;
-
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.Sting;
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.User;
+import edu.upc.eetac.dsa.dsaqt1314g4.netsound.utils.Utils;
 
 public class HomeActivity extends Activity implements AsyncResponse{
 
+	private User user;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
+		setTitle("My home");
 
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction()
@@ -34,18 +35,21 @@ public class HomeActivity extends Activity implements AsyncResponse{
 		TextView helloText = (TextView)findViewById(R.id.username);
 
 		//in your OnCreate() method
-		User user = (User) this.getIntent().getExtras().get("user");
+		user = (User) this.getIntent().getExtras().get("user");
 		helloText.setText("Hello "+user.getName());
 		
-		String urlString = MainActivity.BASE_URL +"profile/"+user.getUsername()+"/following/stings";
-		new CallAPI(this).execute(urlString, user.getToken(), CallAPI.STINGS_OPERATION);		
+		loadStings(user);		
 	}
+
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.home, menu);
+		
+		
 		return true;
 	}
 
@@ -54,11 +58,57 @@ public class HomeActivity extends Activity implements AsyncResponse{
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
+		
+		 switch (item.getItemId()) {
+		    case R.id.action_logout:
+		        Utils.logout(this);
+		        return true;
+		    case R.id.action_refresh:
+		    	loadStings(user);
+		        return true;
+		    case R.id.action_my_stings:
+		    	goToMyStings(user);
+		        return true;
+		    case R.id.action_my_songs:
+		    	goToMySongs(user);
+		        return true;
+		    case R.id.action_my_playlists:
+		    	goToMyPlaylist(user);
+		        return true;
+//		    default:
+//		        return super.onOptionsItemSelected(item);
+		    }
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void goToMyPlaylist(User user) {
+		Intent intent = new Intent(getApplicationContext(), MyPlaylistActivity.class); 
+		intent.putExtra("user", user);
+		  startActivity(intent);
+		
+	}
+
+
+
+	private void goToMySongs(User user) {
+		Intent intent = new Intent(getApplicationContext(), MySongsActivity.class); 
+		intent.putExtra("user", user);
+		  startActivity(intent);
+		
+	}
+
+
+
+	private void loadStings(User user) {
+		String urlString = MainActivity.BASE_URL +"profile/"+user.getUsername()+"/following/stings";
+		new CallAPI(this).execute(urlString, user.getToken(), CallAPI.STINGS_OPERATION);
+	}
+	
+	private void goToMyStings(User user) {
+		Intent intent = new Intent(getApplicationContext(), MyStingsActivity.class); 
+		intent.putExtra("user", user);
+		  startActivity(intent);
+		
 	}
 
 	/**
@@ -94,7 +144,7 @@ public class HomeActivity extends Activity implements AsyncResponse{
 	public void printStings(List<Sting> stingList) {
 		
 		TableLayout table = (TableLayout) findViewById(R.id.stings);
-	
+		table.removeAllViews();
 			//TODO: PINTAR BÉ ELS STINGS
 			//mirar si m'arriba algun
 			for(Sting obj : stingList){
@@ -115,11 +165,14 @@ public class HomeActivity extends Activity implements AsyncResponse{
 //			}
 		
 	}
+	
+	
 
 	@Override
 	public void goToLogin() {
 		// TODO Auto-generated method stub
 		
 	}
+	
 
 }
