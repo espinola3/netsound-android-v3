@@ -82,7 +82,7 @@ public class MyPlaylistActivity extends Activity implements AsyncResponse {
 	
 	private void loadPlaylists(User user) {
 		String urlString = MainActivity.BASE_URL +"playlist/username/"+user.getUsername();
-		new CallAPI(this).execute(urlString, user.getToken(), CallAPI.STINGS_OPERATION);
+		new CallAPI(this).execute(urlString, user.getToken(), CallAPI.PLAYLIST_OPERATION);
 	}
 
 	@Override

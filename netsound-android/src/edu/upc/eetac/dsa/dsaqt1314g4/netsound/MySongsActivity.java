@@ -136,6 +136,7 @@ public class MySongsActivity extends Activity implements AsyncResponse{
 				 row.addView(content);
 				 row.addView(score);
 				 row.addView(style);
+				 row.addView(playSong);
 				 table.addView(row);
 			}
 		

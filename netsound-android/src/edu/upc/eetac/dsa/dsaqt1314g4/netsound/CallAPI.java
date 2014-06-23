@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -16,6 +17,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.Playlist;
+import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.Song;
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.Sting;
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.User;
 
@@ -88,13 +91,51 @@ public class CallAPI extends AsyncTask<String, String, String> {
 	
 	
 	private List<Object> parseSongsJson(JSONObject json) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			List<Object> songs = new ArrayList<>();
+			JSONArray array = json.getJSONArray("songs");
+			for(int i=0; i<array.length();i++){
+				JSONObject sting = array.getJSONObject(i);
+				String album = (String) sting.get("album");
+				String description = (String) sting.get("description");
+				String score = (String) sting.get("score");
+				String songURL = (String) sting.get("songURL");
+				String song_name = (String) sting.get("song_name");
+				String songid = (String) sting.get("songid");
+				String style = (String) sting.get("style");
+				String username = (String) sting.get("username");				
+				songs.add(new Song(songid, username, song_name, album, description, style, new Date().getTime(), songURL,score, "0"));
+			}
+			return songs;
+			
+		} catch (JSONException e) {
+			return null;
+		}	
+	
 	}
 
 	private List<Object> parsePlayListJson(JSONObject json) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			List<Object> playlist = new ArrayList<>();
+			JSONArray array = json.getJSONArray("playlist");
+			for(int i=0; i<array.length();i++){
+				JSONObject playlistItem = array.getJSONObject(i);
+				String description = (String) playlistItem.get("description");
+				String playlist_name = (String) playlistItem.get("playlist_name");
+				long lastModified = (int) playlistItem.get("lastModified");
+				String playlistid = (String) playlistItem.get("playlistid");
+				String score = (String) playlistItem.get("score");
+				String style = (String) playlistItem.get("style");
+				String username = (String) playlistItem.get("username");
+				playlist.add(new Playlist(playlistid, username, playlist_name, description, style, lastModified, score, "0"));
+			}
+			return playlist;
+			
+		} catch (JSONException e) {
+			return null;
+		}	
+		
+		
 	}
 
 	private List<Object> parseStingJson(JSONObject json) {
