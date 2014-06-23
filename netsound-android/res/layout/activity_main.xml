@@ -35,5 +35,13 @@
     android:onClick="signup"
     android:text="@string/button_signup" />
 
+<Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/play"
+    android:background="@drawable/ic_action_play"
+    android:onClick="login"
+     />
+
 </LinearLayout>
 

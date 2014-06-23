@@ -141,19 +141,19 @@ public class HomeActivity extends Activity implements AsyncResponse{
 	}
 
 	@Override
-	public void printStings(List<Sting> stingList) {
+	public void printContent(List<Object> stingList) {
 		
 		TableLayout table = (TableLayout) findViewById(R.id.stings);
 		table.removeAllViews();
 			//TODO: PINTAR BÉ ELS STINGS
 			//mirar si m'arriba algun
-			for(Sting obj : stingList){
+			for(Object obj : stingList){
 				TableRow row=new TableRow(this);
 				 TextView username=new TextView(this);
-				 username.setText(""+obj.getUsername());
+				 username.setText(""+((Sting) obj).getUsername());
 				 
 				 TextView content=new TextView(this);
-				 content.setText(""+obj.getContent());
+				 content.setText(""+((Sting) obj).getContent());
 				 
 				 row.addView(username);
 				 row.addView(content);

@@ -23,9 +23,11 @@ public class CallAPI extends AsyncTask<String, String, String> {
 	 
 	public static String LOGIN_OPERATION = "0";
 	public static String STINGS_OPERATION = "1";
+	public static String PLAYLIST_OPERATION = "2";
+	public static String SONGS_OPERATION = "3";
 	
 	public User user = null;
-	public List<Sting> stingList = null;
+	public List<Object> contentList = null;
 	public AsyncResponse callback=null;	
 	
 	public CallAPI(AsyncResponse callback) {
@@ -63,7 +65,13 @@ public class CallAPI extends AsyncTask<String, String, String> {
 			     user.setToken(basic);
 		     }
 		     else if(whichOperation.equalsIgnoreCase(STINGS_OPERATION)){
-		    	 stingList = parseStingJson(json);
+		    	 contentList = parseStingJson(json);
+		     }
+		     else if(whichOperation.equalsIgnoreCase(PLAYLIST_OPERATION)){
+		    	 contentList = parsePlayListJson(json);
+		     }
+		     else if(whichOperation.equalsIgnoreCase(SONGS_OPERATION)){
+		    	 contentList = parseSongsJson(json);
 		     }
 			 	  
 		 } catch (Exception e ) {		  
@@ -79,9 +87,19 @@ public class CallAPI extends AsyncTask<String, String, String> {
 	}
 	
 	
-	private List<Sting> parseStingJson(JSONObject json) {
+	private List<Object> parseSongsJson(JSONObject json) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private List<Object> parsePlayListJson(JSONObject json) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private List<Object> parseStingJson(JSONObject json) {
 		try {
-			List<Sting> stings = new ArrayList<>();
+			List<Object> stings = new ArrayList<>();
 			JSONArray array = json.getJSONArray("stings");
 			for(int i=0; i<array.length();i++){
 				JSONObject sting = array.getJSONObject(i);
@@ -144,8 +162,8 @@ public class CallAPI extends AsyncTask<String, String, String> {
 				callback.printError("error on login");
 			}
 		}
-		else if(operation.equalsIgnoreCase(STINGS_OPERATION)){
-			callback.printStings(stingList);
+		else if(contentList!=null && !contentList.isEmpty()){
+			callback.printContent(contentList);
 		}
 		
 		

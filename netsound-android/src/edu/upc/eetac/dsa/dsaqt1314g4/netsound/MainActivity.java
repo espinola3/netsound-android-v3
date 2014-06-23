@@ -1,10 +1,13 @@
 package edu.upc.eetac.dsa.dsaqt1314g4.netsound;
 
+import java.io.IOException;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -12,8 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
-import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.Sting;
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.User;
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.utils.Utils;
 
@@ -32,6 +35,16 @@ public class MainActivity extends Activity implements AsyncResponse{
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+		
+		Button playSong = (Button) findViewById(R.id.play);
+		 playSong.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+              play( "http://www.w3schools.com/tags/horse.ogg");
+            }
+        });
+		 
+		
+
 	}
 
 	@Override
@@ -103,7 +116,7 @@ public class MainActivity extends Activity implements AsyncResponse{
 	}
 
 	@Override
-	public void printStings(List<Sting> stingList) {
+	public void printContent(List<Object> stingList) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -117,6 +130,44 @@ public class MainActivity extends Activity implements AsyncResponse{
 	public void goToLogin() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private boolean isPLAYING = false;
+	private MediaPlayer mp;
+	public void play(String url) {
+	
+	    if (!isPLAYING) {
+	        isPLAYING = true;
+	        mp  = new MediaPlayer();
+	        try {
+	            mp.setDataSource(url);
+	            mp.prepare();
+	            mp.start();
+	            mp.setOnCompletionListener(new OnCompletionListener() {
+					
+					@Override
+					public void onCompletion(MediaPlayer mp) {
+						Button playSong = (Button) findViewById(R.id.play);
+				        playSong.setBackgroundResource(R.drawable.ic_action_play);
+						
+					}
+				});
+	            Button playSong = (Button) findViewById(R.id.play);
+	            playSong.setBackgroundResource(R.drawable.ic_action_pause);
+	        } catch (IOException e) {
+	            System.out.print("Error on play --> my songs activity " + e.getMessage());
+	        }
+	    } else {
+	        isPLAYING = false;
+	        Button playSong = (Button) findViewById(R.id.play);
+	        playSong.setBackgroundResource(R.drawable.ic_action_play);
+	        stopPlaying();
+	    }
+	}
+	
+	private void stopPlaying() {
+	    mp.release();
+	    mp = null;
 	}
 
 }

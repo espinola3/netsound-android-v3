@@ -1,18 +1,28 @@
 package edu.upc.eetac.dsa.dsaqt1314g4.netsound;
 
+import java.io.IOException;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.Song;
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.User;
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.utils.Utils;
 
-public class MySongsActivity extends Activity {
+public class MySongsActivity extends Activity implements AsyncResponse{
 
 	private User user;
 	@Override
@@ -26,6 +36,7 @@ public class MySongsActivity extends Activity {
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 		user = (User) this.getIntent().getExtras().get("user");
+		loadSongsList(user);
 	}
 
 	@Override
@@ -70,6 +81,108 @@ public class MySongsActivity extends Activity {
 					container, false);
 			return rootView;
 		}
+	}
+
+	@Override
+	public void goToHome(User user) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void goToLogin() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void printError(String error) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void printContent(List<Object> contentList) {
+		TableLayout table = (TableLayout) findViewById(R.id.songs);
+		table.removeAllViews();
+			//TODO: PINTAR BÉ ELS songs
+			//mirar si m'arriba algun
+			for(final Object obj : contentList){
+				TableRow row=new TableRow(this);
+				 
+				 TextView playlistName=new TextView(this);
+				 playlistName.setText(""+((Song) obj).getSong_name()+" ");
+				 
+				 TextView content=new TextView(this);
+				 content.setText(""+((Song) obj).getDescription()+" ");
+				 
+				 TextView score=new TextView(this);
+				 score.setText(""+((Song) obj).getScore()+" ");
+				 
+				 TextView style=new TextView(this);
+				 style.setText(""+((Song) obj).getStyle()+" ");
+				 
+				
+				 
+				 Button playSong = new Button(this);
+				 playSong.setOnClickListener(new View.OnClickListener() {
+		             public void onClick(View v) {
+		               play( ((Song)obj).getSongURL(), v);
+		             }
+		         });
+
+				 
+				 row.addView(playlistName);
+				 row.addView(content);
+				 row.addView(score);
+				 row.addView(style);
+				 table.addView(row);
+			}
+		
+	}
+	
+	private boolean isPLAYING = false;
+	private MediaPlayer mp;
+	public void play(String url, View view) {
+	
+		if (!isPLAYING) {
+	        isPLAYING = true;
+	        mp  = new MediaPlayer();
+	        try {
+	            mp.setDataSource(url);
+	            mp.prepare();
+	            mp.start();
+	            mp.setOnCompletionListener(new OnCompletionListener() {
+					
+					@Override
+					public void onCompletion(MediaPlayer mp) {
+						Button playSong = (Button) findViewById(R.id.play);
+				        playSong.setBackgroundResource(R.drawable.ic_action_play);
+						
+					}
+				});
+	            Button playSong = (Button) view;
+	            playSong.setBackgroundResource(R.drawable.ic_action_pause);
+	        } catch (IOException e) {
+	            System.out.print("Error on play --> my songs activity " + e.getMessage());
+	        }
+	    } else {
+	        isPLAYING = false;
+	        Button playSong = (Button) view;
+	        playSong.setBackgroundResource(R.drawable.ic_action_play);
+	        stopPlaying();
+	    }
+	}
+	
+	private void stopPlaying() {
+	    mp.release();
+	    mp = null;
+	}
+
+
+	private void loadSongsList(User user) {
+		String urlString = MainActivity.BASE_URL +"songs/username/"+user.getUsername();
+		new CallAPI(this).execute(urlString, user.getToken(), CallAPI.SONGS_OPERATION);
 	}
 
 }

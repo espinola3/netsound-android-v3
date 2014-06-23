@@ -108,7 +108,7 @@ public class SignUpActivity extends Activity implements AsyncResponse{
 	}
 
 	@Override
-	public void printStings(List<Sting> stingList) {
+	public void printContent(List<Object> stingList) {
 		// TODO Auto-generated method stub
 		
 	}

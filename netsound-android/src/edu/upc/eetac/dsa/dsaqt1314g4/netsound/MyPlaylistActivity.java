@@ -1,5 +1,7 @@
 package edu.upc.eetac.dsa.dsaqt1314g4.netsound;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -9,10 +11,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.Playlist;
+import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.Sting;
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.User;
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.utils.Utils;
 
-public class MyPlaylistActivity extends Activity {
+public class MyPlaylistActivity extends Activity implements AsyncResponse {
 
 	private User user;
 	@Override
@@ -26,6 +33,7 @@ public class MyPlaylistActivity extends Activity {
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 		user = (User) this.getIntent().getExtras().get("user");
+		loadPlaylists(user);
 	}
 
 	@Override
@@ -70,6 +78,59 @@ public class MyPlaylistActivity extends Activity {
 					container, false);
 			return rootView;
 		}
+	}
+	
+	private void loadPlaylists(User user) {
+		String urlString = MainActivity.BASE_URL +"playlist/username/"+user.getUsername();
+		new CallAPI(this).execute(urlString, user.getToken(), CallAPI.STINGS_OPERATION);
+	}
+
+	@Override
+	public void goToHome(User user) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void goToLogin() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void printError(String error) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void printContent(List<Object> playlist) {
+		TableLayout table = (TableLayout) findViewById(R.id.playlists);
+		table.removeAllViews();
+			//TODO: PINTAR BÉ ELS playlists
+			//mirar si m'arriba algun
+			for(Object obj : playlist){
+				TableRow row=new TableRow(this);
+				 
+				 TextView playlistName=new TextView(this);
+				 playlistName.setText(""+((Playlist) obj).getPlaylist_name()+" ");
+				 
+				 TextView content=new TextView(this);
+				 content.setText(""+((Playlist) obj).getDescription()+" ");
+				 
+				 TextView score=new TextView(this);
+				 score.setText(""+((Playlist) obj).getScore()+" ");
+				 
+				 TextView style=new TextView(this);
+				 style.setText(""+((Playlist) obj).getStyle()+" ");
+				 
+				 row.addView(playlistName);
+				 row.addView(content);
+				 row.addView(score);
+				 row.addView(style);
+				 table.addView(row);
+			}
+		
 	}
 
 }
