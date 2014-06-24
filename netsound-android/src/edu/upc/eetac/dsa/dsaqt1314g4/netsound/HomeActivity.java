@@ -75,11 +75,23 @@ public class HomeActivity extends Activity implements AsyncResponse{
 		    case R.id.action_my_playlists:
 		    	goToMyPlaylist(user);
 		        return true;
+		    case R.id.action_social:
+		    	goToSocial(user);
+		        return true;
 //		    default:
 //		        return super.onOptionsItemSelected(item);
 		    }
 		return super.onOptionsItemSelected(item);
 	}
+
+	private void goToSocial(User user2) {
+		Intent intent = new Intent(getApplicationContext(), SocialActivity.class); 
+		intent.putExtra("user", user);
+		startActivity(intent);
+		
+	}
+
+
 
 	private void goToMyPlaylist(User user) {
 		Intent intent = new Intent(getApplicationContext(), MyPlaylistActivity.class); 

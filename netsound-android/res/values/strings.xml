@@ -25,5 +25,8 @@
     <string name="action_publish">Publish sting</string>
     <string name="choose">Choose</string>
     <string name="title_activity_social">SocialActivity</string>
-
+    <string name="myFollowers">My Followers</string>
+    <string name="myFollowings">My Followings</string>
+    <string name="action_social">Social</string> 
+ 
 </resources>

@@ -24,10 +24,13 @@ import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.User;
 
 public class CallAPI extends AsyncTask<String, String, String> {
 	 
+	
 	public static String LOGIN_OPERATION = "0";
 	public static String STINGS_OPERATION = "1";
 	public static String PLAYLIST_OPERATION = "2";
 	public static String SONGS_OPERATION = "3";
+	public static String FOLLOWER_OPERATION = "4";
+	public static String FOLLOWINGS_OPERATION = "5";
 	
 	public User user = null;
 	public List<Object> contentList = null;
@@ -76,6 +79,12 @@ public class CallAPI extends AsyncTask<String, String, String> {
 		     else if(whichOperation.equalsIgnoreCase(SONGS_OPERATION)){
 		    	 contentList = parseSongsJson(json);
 		     }
+		     else if(whichOperation.equalsIgnoreCase(FOLLOWER_OPERATION)){
+		    	 contentList = parseFollowersJson(json);
+		     }
+		     else if(whichOperation.equalsIgnoreCase(FOLLOWINGS_OPERATION)){
+		    	 contentList = parseFollowingsJson(json);
+		     }
 			 	  
 		 } catch (Exception e ) {		  
 			 System.out.println(e.getMessage());		  			 		  
@@ -90,6 +99,51 @@ public class CallAPI extends AsyncTask<String, String, String> {
 	}
 	
 	
+	private List<Object> parseFollowersJson(JSONObject json) {
+		List<Object> users = null;
+		try {
+			 users = new ArrayList<>();
+			JSONArray array = json.getJSONArray("users");
+			for(int i=0; i<array.length();i++){
+				JSONObject following = array.getJSONObject(i);
+				String description = (String) following.get("description");
+				String name = (String) following.get("name");
+				String username = (String) following.get("username");
+								
+				User us = new User(username, name, description, "", "", System.currentTimeMillis());
+				us.setMyFollower(true);
+				users.add(us);
+			}
+			return users;
+			
+		} catch (JSONException e) {
+			return users;
+		}	
+	}
+
+	private List<Object> parseFollowingsJson(JSONObject json) {
+		// {"users":[{"date_create":0,"description":"I am batman","name":"Ferran","username":"ferran.diaz"}]}
+		List<Object> users = null;
+		try {
+			 users = new ArrayList<>();
+			JSONArray array = json.getJSONArray("users");
+			for(int i=0; i<array.length();i++){
+				JSONObject following = array.getJSONObject(i);
+				String description = (String) following.get("description");
+				String name = (String) following.get("name");
+				String username = (String) following.get("username");
+								
+				User us = new User(username, name, description, "", "", System.currentTimeMillis());
+				us.setMyFollower(false);
+				users.add(us);
+			}
+			return users;
+			
+		} catch (JSONException e) {
+			return users;
+		}	
+	}
+
 	private List<Object> parseSongsJson(JSONObject json) {
 		try {
 			List<Object> songs = new ArrayList<>();
