@@ -25,6 +25,7 @@ import edu.upc.eetac.dsa.dsaqt1314g4.netsound.utils.Utils;
 public class MySongsActivity extends Activity implements AsyncResponse{
 
 	private User user;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,6 +56,11 @@ public class MySongsActivity extends Activity implements AsyncResponse{
 		switch (item.getItemId()) {
 	    case R.id.action_logout:
 	        Utils.logout(this);
+	        return true;
+	    case R.id.action_publish:
+	    	Intent in = new Intent(getApplicationContext(), PublishStingActivity.class);			
+			in.putExtra("user", user);
+			startActivity(in);
 	        return true;
 	    case android.R.id.home:
 			Intent i = new Intent(getApplicationContext(), HomeActivity.class);
@@ -144,7 +150,7 @@ public class MySongsActivity extends Activity implements AsyncResponse{
 	
 	private boolean isPLAYING = false;
 	private MediaPlayer mp;
-	public void play(String url, View view) {
+	public void play(String url, final View view) {
 	
 		if (!isPLAYING) {
 	        isPLAYING = true;
@@ -157,11 +163,13 @@ public class MySongsActivity extends Activity implements AsyncResponse{
 					
 					@Override
 					public void onCompletion(MediaPlayer mp) {
-						Button playSong = (Button) findViewById(R.id.play);
+						//quan acabi la canço posem el play
+						Button playSong = (Button) view;
 				        playSong.setBackgroundResource(R.drawable.ic_action_play);
 						
 					}
 				});
+	            //setejar la icona pause
 	            Button playSong = (Button) view;
 	            playSong.setBackgroundResource(R.drawable.ic_action_pause);
 	        } catch (IOException e) {

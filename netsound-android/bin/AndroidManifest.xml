@@ -57,6 +57,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.upc.eetac.dsa.dsaqt1314g4.netsound.HomeActivity" />
         </activity>
+        <activity
+            android:name="edu.upc.eetac.dsa.dsaqt1314g4.netsound.PublishStingActivity"
+            android:label="@string/title_activity_publish_sting" >
+        </activity>
     </application>
 
 </manifest>
