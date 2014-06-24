@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.dsaqt1314g4.netsound;
 
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -15,6 +16,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.Playlist;
+import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.Song;
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.Sting;
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.model.User;
 import edu.upc.eetac.dsa.dsaqt1314g4.netsound.utils.Utils;
@@ -22,6 +24,7 @@ import edu.upc.eetac.dsa.dsaqt1314g4.netsound.utils.Utils;
 public class MyPlaylistActivity extends Activity implements AsyncResponse {
 
 	private User user;
+	private HashMap<String, String> playlists = new HashMap<>();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,6 +47,7 @@ public class MyPlaylistActivity extends Activity implements AsyncResponse {
 		return true;
 	}
 
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -52,6 +56,9 @@ public class MyPlaylistActivity extends Activity implements AsyncResponse {
 		switch (item.getItemId()) {
 	    case R.id.action_logout:
 	        Utils.logout(this);
+	        return true;
+	    case R.id.action_publish:
+	    	publish();
 	        return true;
 	    case android.R.id.home:
 			Intent i = new Intent(getApplicationContext(), HomeActivity.class);
@@ -63,6 +70,13 @@ public class MyPlaylistActivity extends Activity implements AsyncResponse {
 		return super.onOptionsItemSelected(item);
 	}
 
+	private void publish() {
+		Intent in = new Intent(getApplicationContext(), PublishStingActivity.class);			
+		in.putExtra("user", user);
+		in.putExtra("whichPost", PublishStingActivity.PLAYLIST_POST);
+		in.putExtra("contentMap", playlists);
+		startActivity(in);
+	}
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
@@ -111,25 +125,35 @@ public class MyPlaylistActivity extends Activity implements AsyncResponse {
 			//mirar si m'arriba algun
 			for(Object obj : playlist){
 				TableRow row=new TableRow(this);
+				
+				String playlistId= ((Playlist) obj).getPlaylistid();
+				String playlistName= ((Playlist) obj).getPlaylist_name();				 
+				playlists.put(playlistId, playlistName);
 				 
-				 TextView playlistName=new TextView(this);
-				 playlistName.setText(""+((Playlist) obj).getPlaylist_name()+" ");
+				 TextView playlistNameText=new TextView(this);
+				 playlistNameText.setText("Playlist name: "+((Playlist) obj).getPlaylist_name()+" ");
 				 
 				 TextView content=new TextView(this);
-				 content.setText(""+((Playlist) obj).getDescription()+" ");
+				 content.setText("Description: "+((Playlist) obj).getDescription()+ System.getProperty ("line.separator"));
 				 
 				 TextView score=new TextView(this);
-				 score.setText(""+((Playlist) obj).getScore()+" ");
+				 score.setText("Score: "+((Playlist) obj).getScore()+" ");
 				 
 				 TextView style=new TextView(this);
-				 style.setText(""+((Playlist) obj).getStyle()+" ");
+				 style.setText("Style: "+((Playlist) obj).getStyle()+ System.getProperty ("line.separator")+ System.getProperty ("line.separator"));
 				 
-				 row.addView(playlistName);
+				 row.addView(playlistNameText);
 				 row.addView(content);
 				 row.addView(score);
 				 row.addView(style);
 				 table.addView(row);
 			}
+		
+	}
+
+	@Override
+	public void goToStings() {
+		// TODO Auto-generated method stub
 		
 	}
 

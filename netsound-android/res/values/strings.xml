@@ -20,8 +20,10 @@
     <string name="title_activity_my_songs">MySongsActivity</string>
     <string name="title_activity_my_playlist">MyPlaylistActivity</string>
     <string name="title_activity_publish_sting">PublishStingActivity</string>
-    <string name="comment">Write your sting here..</string> 
-    <string name="publish">Publish</string> 
-    <string name="action_publish">Publish sting</string> 
+    <string name="comment">Write your sting here..</string>
+    <string name="publish">Publish</string>
+    <string name="action_publish">Publish sting</string>
+    <string name="choose">Choose</string>
+    <string name="title_activity_social">SocialActivity</string>
 
 </resources>

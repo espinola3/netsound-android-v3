@@ -1,6 +1,7 @@
 package edu.upc.eetac.dsa.dsaqt1314g4.netsound;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -25,6 +26,7 @@ import edu.upc.eetac.dsa.dsaqt1314g4.netsound.utils.Utils;
 public class MySongsActivity extends Activity implements AsyncResponse{
 
 	private User user;
+	private HashMap<String, String> songs = new HashMap<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +60,7 @@ public class MySongsActivity extends Activity implements AsyncResponse{
 	        Utils.logout(this);
 	        return true;
 	    case R.id.action_publish:
-	    	Intent in = new Intent(getApplicationContext(), PublishStingActivity.class);			
-			in.putExtra("user", user);
-			startActivity(in);
+	    	publish();
 	        return true;
 	    case android.R.id.home:
 			Intent i = new Intent(getApplicationContext(), HomeActivity.class);
@@ -70,6 +70,14 @@ public class MySongsActivity extends Activity implements AsyncResponse{
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void publish() {
+		Intent in = new Intent(getApplicationContext(), PublishStingActivity.class);			
+		in.putExtra("user", user);
+		in.putExtra("whichPost", PublishStingActivity.SONG_POST);
+		in.putExtra("contentMap", songs);
+		startActivity(in);
 	}
 
 	/**
@@ -115,9 +123,13 @@ public class MySongsActivity extends Activity implements AsyncResponse{
 			//mirar si m'arriba algun
 			for(final Object obj : contentList){
 				TableRow row=new TableRow(this);
-				 
+				
+				String songId= ((Song) obj).getSongid();
+				String songName= ((Song) obj).getSong_name();				 
+				songs.put(songId, songName);
+				
 				 TextView playlistName=new TextView(this);
-				 playlistName.setText(""+((Song) obj).getSong_name()+" ");
+				 playlistName.setText(""+songName+" ");
 				 
 				 TextView content=new TextView(this);
 				 content.setText(""+((Song) obj).getDescription()+" ");
@@ -128,9 +140,10 @@ public class MySongsActivity extends Activity implements AsyncResponse{
 				 TextView style=new TextView(this);
 				 style.setText(""+((Song) obj).getStyle()+" ");
 				 
-				
+				 
 				 
 				 Button playSong = new Button(this);
+				 playSong.setBackgroundResource(R.drawable.ic_action_play);
 				 playSong.setOnClickListener(new View.OnClickListener() {
 		             public void onClick(View v) {
 		               play( ((Song)obj).getSongURL(), v);
@@ -171,7 +184,7 @@ public class MySongsActivity extends Activity implements AsyncResponse{
 				});
 	            //setejar la icona pause
 	            Button playSong = (Button) view;
-	            playSong.setBackgroundResource(R.drawable.ic_action_pause);
+	            playSong.setBackgroundResource(R.drawable.ic_action_stop);
 	        } catch (IOException e) {
 	            System.out.print("Error on play --> my songs activity " + e.getMessage());
 	        }
@@ -192,6 +205,12 @@ public class MySongsActivity extends Activity implements AsyncResponse{
 	private void loadSongsList(User user) {
 		String urlString = MainActivity.BASE_URL +"songs/username/"+user.getUsername();
 		new CallAPI(this).execute(urlString, user.getToken(), CallAPI.SONGS_OPERATION);
+	}
+
+	@Override
+	public void goToStings() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

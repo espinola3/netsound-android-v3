@@ -173,6 +173,14 @@ public class HomeActivity extends Activity implements AsyncResponse{
 		// TODO Auto-generated method stub
 		
 	}
+
+
+
+	@Override
+	public void goToStings() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

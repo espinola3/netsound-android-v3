@@ -9,4 +9,5 @@ public interface AsyncResponse {
 	public void goToLogin();
 	public void printError(String error);
 	public void printContent(List<Object> contentList);
+	void goToStings();
 }

@@ -113,4 +113,10 @@ public class SignUpActivity extends Activity implements AsyncResponse{
 		
 	}
 
+	@Override
+	public void goToStings() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
